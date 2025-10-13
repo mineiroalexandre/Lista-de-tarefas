@@ -11,8 +11,8 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "127.0.0.1",
   database: "lista_tarefas",
-  user: "root",          // <- usuário padrão do phpMyAdmin/XAMPP
-  password: "",          // <- senha 
+  user: "tarefas_user",          // <- usuário 
+  password: "senha123",          // <- senha 
   port: 3306
 });
 
@@ -30,6 +30,15 @@ app.post("/tarefas", (req, res) => {
   db.query("INSERT INTO tarefas (descricao) VALUES (?)", [descricao], (err, result) => {
     if (err) throw err;
     res.json({ id: result.insertId, descricao, concluida: false });
+  });
+});
+
+// Deletar tarefa
+app.delete("/tarefas/:id", (req, res) => {
+  const { id } = req.params;
+  db.query("DELETE FROM tarefas WHERE id=?", [id], (err) => {
+    if (err) throw err;
+    res.sendStatus(200);
   });
 });
 

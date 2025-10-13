@@ -4,7 +4,7 @@ const API_URL = "http://localhost:3000/tarefas";
 
 // Carregar todas as tarefas do banco ao abrir a página
 async function carregarTarefas() {
-    tasklist.innerHTML = ""; // limpa a lista
+    tasklist.innerHTML = ""; 
     const res = await fetch(API_URL);
     const tarefas = await res.json();
 
@@ -35,6 +35,12 @@ async function addTask() {
         taskInput.value = "";
         carregarTarefas();
     }
+}
+
+// Excluir tarefa
+async function deletarTarefa(id) {
+    await fetch(`${API_URL}/${id}`, { method: "DELETE" });
+    carregarTarefas();
 }
 
 // Carregar ao abrir
