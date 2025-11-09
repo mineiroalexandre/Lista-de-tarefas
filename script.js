@@ -43,5 +43,15 @@ async function deletarTarefa(id) {
     carregarTarefas();
 }
 
+// Concluir/Desmarcar tarefa
+async function concluirTarefa(id, concluida) {
+    await fetch(`${API_URL}/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ concluida })
+    });
+    carregarTarefas();
+}
+
 // Carregar ao abrir
 carregarTarefas();

@@ -42,6 +42,16 @@ app.delete("/tarefas/:id", (req, res) => {
   });
 });
 
+// Marcar como concluída
+app.put("/tarefas/:id", (req, res) => {
+  const { id } = req.params;
+  const { concluida } = req.body;
+  db.query("UPDATE tarefas SET concluida=? WHERE id=?", [concluida, id], (err) => {
+    if (err) throw err;
+    res.sendStatus(200);
+  });
+});
+
 app.listen(3000, () => {
   console.log("Servidor rodando em http://localhost:3000");
 });
