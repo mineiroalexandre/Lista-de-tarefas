@@ -11,47 +11,76 @@ app.use(bodyParser.json());
 const db = mysql.createConnection({
   host: "127.0.0.1",
   database: "lista_tarefas",
-  user: "tarefas_user",          // <- usuário 
-  password: "senha123",          // <- senha 
+  user: "tarefas_user",
+  password: "senha123",
   port: 3306
 });
 
-// Listar tarefas
+// LISTAR TAREFAS (AGORA POR ORDEM)
 app.get("/tarefas", (req, res) => {
-  db.query("SELECT * FROM tarefas ORDER BY id DESC", (err, results) => {
+  const sql = "SELECT * FROM tarefas ORDER BY ordem ASC";
+  db.query(sql, (err, results) => {
     if (err) throw err;
     res.json(results);
   });
 });
 
-// Adicionar tarefa
+// ADICIONAR TAREFA JÁ COM ORDEM
 app.post("/tarefas", (req, res) => {
-  const { descricao } = req.body;
-  db.query("INSERT INTO tarefas (descricao) VALUES (?)", [descricao], (err, result) => {
+  const { descricao, concluida = false, ordem = 0 } = req.body;
+
+  const sqlMaiorOrdem = "SELECT MAX(ordem) AS maxOrdem FROM tarefas";
+  db.query(sqlMaiorOrdem, (err, rows) => {
     if (err) throw err;
-    res.json({ id: result.insertId, descricao, concluida: false });
+
+    const novaOrdem = (rows[0].maxOrdem || 0) + 1;
+
+    const sqlInsert = "INSERT INTO tarefas (descricao, concluida, ordem) VALUES (?, ?, ?)";
+    db.query(sqlInsert, [descricao, concluida, novaOrdem], (err, result) => {
+      if (err) throw err;
+
+      res.json({
+        id: result.insertId,
+        descricao,
+        concluida,
+        ordem: novaOrdem
+      });
+    });
   });
 });
 
-// Deletar tarefa
+// DELETAR TAREFA
 app.delete("/tarefas/:id", (req, res) => {
   const { id } = req.params;
+
   db.query("DELETE FROM tarefas WHERE id=?", [id], (err) => {
     if (err) throw err;
     res.sendStatus(200);
   });
 });
 
-// Marcar como concluída
+// MARCAR COMO CONCLUÍDA
 app.put("/tarefas/:id", (req, res) => {
   const { id } = req.params;
   const { concluida } = req.body;
+
   db.query("UPDATE tarefas SET concluida=? WHERE id=?", [concluida, id], (err) => {
     if (err) throw err;
     res.sendStatus(200);
   });
 });
 
+// ATUALIZAR SOMENTE A ORDEM
+app.patch("/tarefas/:id", (req, res) => {
+  const { id } = req.params;
+  const { ordem } = req.body;
+
+  db.query("UPDATE tarefas SET ordem=? WHERE id=?", [ordem, id], (err) => {
+    if (err) throw err;
+    res.sendStatus(200);
+  });
+});
+
 app.listen(3000, () => {
-  console.log("Servidor rodando em http://localhost:3000");
+  console.log("Servidor rodando");
 });

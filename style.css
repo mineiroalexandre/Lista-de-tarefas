@@ -7,9 +7,95 @@ body{
 }
 
 .conteiner {
-    max-width: 500px;
-    margin: 30px auto;
-    padding: 20px;
+    max-width: 600px;
+    margin: 40px auto;
+    padding: 25px;
     background-color: #090a0a;
-    border-radius: 10px;
+    border-radius: 12px;
+}
+
+.top {
+    text-align: center;
+}
+
+.addBox {
+    display: flex;
+    justify-content: center;
+    gap: 10px;
+    margin-bottom: 20px;
+}
+
+.addBox input {
+    width: 70%;
+    padding: 10px;
+    font-size: 16px;
+    border: none;
+    border-radius: 6px;
+}
+
+.addBox button {
+    background-color: #1f7a1f;
+    border: none;
+    padding: 10px 12px;
+    border-radius: 6px;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+}
+
+.taskBox {
+    list-style: none;
+    padding: 0;
+    margin-top: 10px;
+}
+
+.taskCard {
+    background-color: #111;
+    padding: 12px;
+    margin-bottom: 10px;
+    border-radius: 8px;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    word-wrap: break-word;
+    white-space: normal;
+
+    cursor: grab;
+}
+.taskCard:active {
+    cursor: grabbing;
+}
+
+.btns {
+    display: flex;
+    gap: 10px;
+}
+
+.btns button {
+    background: none;
+    border: none;
+    cursor: pointer;
+    color: white;
+    font-size: 18px;
+}
+
+.btns .delete { color: #e03a3a; }
+.btns .done { color: #32cd32; }
+.btns .undo { color: #ffa500; }
+
+.taskDone {
+    text-decoration: line-through;
+    opacity: 0.6;
+}
+
+#clearCompleted {
+    margin-top: 20px;
+    width: 100%;
+    padding: 10px;
+    background-color: #b30000;
+    border: none;
+    color: white;
+    font-size: 16px;
+    border-radius: 8px;
+    cursor: pointer;
 }
